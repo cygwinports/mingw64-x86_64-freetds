@@ -1,0 +1,46 @@
+CROSS_HOST="x86_64-w64-mingw32"
+inherit cross
+
+NAME="mingw64-x86_64-freetds"
+VERSION=0.91
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="MS-SQL and Sybase database library for Win64 toolchain"
+DESCRIPTION="FreeTDS is a set of libraries for Unix and Linux that allows your
+programs to natively talk to Microsoft SQL Server and Sybase databases.
+Technically speaking, FreeTDS is an open source implementation of the
+TDS (Tabular Data Stream) protocol used by these databases for their own
+clients. It supports many different flavors of the protocol and three
+APIs to access it. Additionally FreeTDS works with other software such
+as Perl and PHP, providing access from those languages as well."
+HOMEPAGE="http://www.freetds.org/"
+SRC_URI="ftp://ftp.freetds.org/pub/freetds/stable/freetds-${VERSION}.tar.gz"
+SRC_DIR="freetds-${VERSION}"
+PATCH_URI="0.91-libiconv.patch"
+
+DIFF_EXCLUDES="version.rc"
+
+CYGCONF_ARGS="
+	--disable-krb5
+	--enable-msdblib
+	--enable-sybase-compat
+	--with-tdsver=4.2
+	--disable-odbc
+	--with-gnutls
+"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	cygconf
+	cygmake LIBS="-lgcrypt"
+}
+
+src_install() {
+	cd ${B}
+	cyginstall bin_PROGRAMS= dist_bin_SCRIPTS= man_MANS= TARGET_DOCDIR=${T}
+	rm -fr ${D}${CROSS_PREFIX}/etc/
+}
+
+KEEP_LA_FILES="none"
