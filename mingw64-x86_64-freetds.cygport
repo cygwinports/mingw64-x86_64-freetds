@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-freetds"
-VERSION=0.91
+VERSION=1.00.37
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="MS-SQL and Sybase database library for Win64 toolchain"
@@ -16,9 +16,9 @@ as Perl and PHP, providing access from those languages as well."
 HOMEPAGE="http://www.freetds.org/"
 SRC_URI="ftp://ftp.freetds.org/pub/freetds/stable/freetds-${VERSION}.tar.gz"
 SRC_DIR="freetds-${VERSION}"
-PATCH_URI="0.91-libiconv.patch"
+PATCH_URI="1.00.37-mingw.patch"
 
-DIFF_EXCLUDES="version.rc"
+DIFF_EXCLUDES="freetds.conf.5 version.*"
 
 CYGCONF_ARGS="
 	--disable-krb5
@@ -29,18 +29,8 @@ CYGCONF_ARGS="
 	--with-gnutls
 "
 
-src_compile() {
-	cd ${S}
-	cygautoreconf
-	cd ${B}
-	cygconf
-	cygmake LIBS="-lgcrypt"
-}
-
 src_install() {
 	cd ${B}
 	cyginstall bin_PROGRAMS= dist_bin_SCRIPTS= man_MANS= TARGET_DOCDIR=${T}
 	rm -fr ${D}${CROSS_PREFIX}/etc/
 }
-
-KEEP_LA_FILES="none"

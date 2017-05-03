@@ -1,0 +1,17 @@
+--- origsrc/freetds-1.00.37/configure.ac	2017-04-30 04:00:47.000000000 -0500
++++ src/freetds-1.00.37/configure.ac	2017-05-03 02:31:03.560702200 -0500
+@@ -170,13 +170,7 @@ tds_mingw=no
+ case $host in
+ *-*-mingw*)
+ 	tds_mingw=yes
+-	if test "$host_cpu" = "x86_64"; then
+-		LIBS="-lws2_32"
+-	elif test -r /usr/lib/w32api/libws2_32.a; then
+-		LIBS="-L/usr/lib/w32api -lws2_32"
+-	else
+-		LIBS="-lws2_32"
+-	fi
++	LIBS="-lws2_32"
+ 	krb5_libs=
+ 	AM_CONDITIONAL(MINGW32, true)
+ 	;;
